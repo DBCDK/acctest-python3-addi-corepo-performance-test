@@ -1,0 +1,45 @@
+
+Eksport snapshot:
+
+ssh itwn-001
+
+
+Opret postgresql container:
+docker run -e POSTGRES_USER=corepo -e POSTGRES_PASSWORD=corepo -e POSTGRES_DB=corepo docker.dbc.dk/dbc-postgres:10
+
+Dump postgresql image til container (~1 time, ved 2018/11):
+docker exec -it <containerId> /bin/bash
+pg_dump -h fbstest-i02 -p 16001 -U corepo corepo_db | psql corepo
+Password: Hent fra mesos
+TODO ?:
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO corepo;
+
+Brug evt osscrum-i01 snapshot til test:
+pg_dump -h osscrum-i01 -p 5433 -U corepo corepo | psql corepo
+
+
+Fjern alle addi relationer, så addi-service kører uden eksisterende relationer
+
+
+Stop og commit til image for senere performance test kørsel
+docker stop <containerId>
+docker commit <containerId> isworker/corepo-fbs-test-no-relations-snapshot-postgres-1.0:20181109
+isworker/corepo-fbs-test-snapshot-postgres-1.0:20181107
+
+Evt lav backup til fil hvis image bliver slettet
+docker save isworker/corepo-fbs-test-no-relations-snapshot-postgres-1.0:20181109 | gzip > corepo-fbs-test-no-relations-snapshot-postgres-1.0.20181109.tgz
+Gem til  /share/bteam/corepo-snapshot/*
+
+
+
+
+
+TODO:
+Modify max_wal_size while dumping to make faster (currently took 1 hour 8 minutes)?
+
+2018-11-05 09:51:56.048 CET [78] LOG:  checkpoints are occurring too frequently (24 seconds apart)
+2018-11-05 09:51:56.048 CET [78] HINT:  Consider increasing the configuration parameter "max_wal_size".
+...
+2018-11-05 10:59:02.273 CET [78] LOG:  checkpoints are occurring too frequently (24 seconds apart)
+2018-11-05 10:59:02.273 CET [78] HINT:  Consider increasing the configuration parameter "max_wal_size".
+
