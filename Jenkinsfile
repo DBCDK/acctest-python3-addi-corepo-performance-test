@@ -1,6 +1,6 @@
 
-def buildNode = 'nightly-itwn-001.dbc.dk'
-//def buildNode = 'regression-itwn-001'
+//def buildNode = 'nightly-itwn-001.dbc.dk'
+def buildNode = 'regression-itwn-001'
 def TEST_DURATION_IN_SECONDS=900
 def COREPO_IMAGE='isworker/corepo-fbs-test-no-relations-snapshot-postgres-1.0:20181109'
 THREAD_POOL=4
@@ -95,7 +95,7 @@ pipeline {
                 rm -fr logfiles
             '''
         }
-        failure {
+        /*failure {
             script {
                 emailext(
                         recipientProviders: [developers(), culprits()],
@@ -109,7 +109,7 @@ pipeline {
                         message: "${env.JOB_NAME} #${env.BUILD_NUMBER} failed and needs attention: ${env.BUILD_URL}",
                         tokenCredentialId: 'slack-global-integration-token')
             }
-        }
+        }*/
     }
 }
 
