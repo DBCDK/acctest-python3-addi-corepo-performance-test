@@ -5,9 +5,8 @@ def TEST_DURATION_IN_SECONDS=900
 def COREPO_IMAGE='isworker/corepo-fbs-test-no-relations-snapshot-postgres-1.0:20181109'
 THREAD_POOL=4
 
-
-def ownerEmail = "os-team@dbc.dk"
-def ownerSlack = "search"
+def ownerEmail = "de-team@dbc.dk"
+def ownerSlack = "data-engineering-team"
 
 pipeline {
     agent {
